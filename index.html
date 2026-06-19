@@ -76,14 +76,17 @@
       background: none;
       border: 1px solid var(--border);
       border-radius: 8px;
-      width: 36px; height: 36px;
+      padding: 0 12px;
+      height: 36px;
       display: flex;
       align-items: center;
       justify-content: center;
       cursor: pointer;
-      color: var(--text-muted);
-      font-size: 1.1rem;
+      color: var(--text-secondary);
+      font-size: 0.78rem;
+      font-weight: 600;
       transition: all .2s;
+      white-space: nowrap;
     }
     .theme-toggle:hover {
       border-color: #7c5cfc;
@@ -516,24 +519,7 @@
     }
     .fb-client .info strong { display: block; font-size: 0.82rem; }
     .fb-client .info span { font-size: 0.7rem; color: var(--text-light); }
-    .fb-img {
-      border-radius: 10px;
-      overflow: hidden;
-      background: var(--bg);
-      aspect-ratio: 16/9;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: var(--text-light);
-      font-size: 0.75rem;
-      cursor: pointer;
-      border: 1px dashed var(--border);
-      transition: all .2s;
-    }
-    .fb-img:hover { border-color: #7c5cfc; background: rgba(124,92,252,0.04); color: #7c5cfc; }
-    .fb-img .upl { font-size: 1.3rem; margin-bottom: 4px; }
-    .fb-img.has-image { border: none; aspect-ratio: auto; cursor: default; }
-    .fb-img.has-image img { width: 100%; display: block; border-radius: 10px; }
+
 
     @media (max-width: 800px) { .feedback-grid { grid-template-columns: 1fr; } }
 
@@ -775,13 +761,11 @@
     <div class="container">
       <div class="section-tag">Avis</div>
       <h2 class="section-title">Ils parlent de moi</h2>
-      <p class="section-sub">Clique pour ajouter une capture d'écran de ton feedback.</p>
       <div class="feedback-grid">
-        <div class="fb-card"><div class="stars">★★★★★</div><blockquote>Luka a tout de suite compris mon style. Le script était parfait du premier coup.</blockquote><div class="fb-client"><div class="avatar" style="background:#f97316;">M</div><div class="info"><strong>Marie</strong><span>Chaîne lifestyle</span></div></div><div class="fb-img" onclick="document.getElementById('fileInput').click();"><div><div class="upl">🖼️</div><div>Ajouter</div></div></div></div>
-        <div class="fb-card"><div class="stars">★★★★★</div><blockquote>Le call m'a débloqué en 30 min. Luka est ultra concret et à l'écoute.</blockquote><div class="fb-client"><div class="avatar" style="background:#06b6d4;">T</div><div class="info"><strong>Thomas</strong><span>Chaîne tech</span></div></div><div class="fb-img" onclick="document.getElementById('fileInput').click();"><div><div class="upl">🖼️</div><div>Ajouter</div></div></div></div>
-        <div class="fb-card"><div class="stars">★★★★★</div><blockquote>Pour ce prix, je m'attendais pas à une telle qualité. Je reviens pour le pack Créateur.</blockquote><div class="fb-client"><div class="avatar" style="background:#10b981;">S</div><div class="info"><strong>Sofia</strong><span>Chaîne bien-être</span></div></div><div class="fb-img" onclick="document.getElementById('fileInput').click();"><div><div class="upl">🖼️</div><div>Ajouter</div></div></div></div>
+        <div class="fb-card"><div class="stars">★★★★★</div><blockquote>Luka a tout de suite compris mon style. Le script était parfait du premier coup.</blockquote><div class="fb-client"><div class="avatar" style="background:#f97316;">M</div><div class="info"><strong>Marie</strong><span>Chaîne lifestyle</span></div></div></div>
+        <div class="fb-card"><div class="stars">★★★★★</div><blockquote>Le call m'a débloqué en 30 min. Luka est ultra concret et à l'écoute.</blockquote><div class="fb-client"><div class="avatar" style="background:#06b6d4;">T</div><div class="info"><strong>Thomas</strong><span>Chaîne tech</span></div></div></div>
+        <div class="fb-card"><div class="stars">★★★★★</div><blockquote>Pour ce prix, je m'attendais pas à une telle qualité. Je reviens pour le pack Créateur.</blockquote><div class="fb-client"><div class="avatar" style="background:#10b981;">S</div><div class="info"><strong>Sofia</strong><span>Chaîne bien-être</span></div></div></div>
       </div>
-      <input type="file" id="fileInput" accept="image/*" style="display:none;" multiple onchange="handleImageUpload(event)">
     </div>
   </section>
 
@@ -862,14 +846,14 @@
     const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
     const theme = saved || (prefersDark ? 'dark' : 'light');
     html.setAttribute('data-theme', theme);
-    themeToggle.textContent = theme === 'dark' ? '☀️' : '🌙';
+    themeToggle.textContent = theme === 'dark' ? 'Clair' : 'Foncé';
 
     themeToggle.addEventListener('click', () => {
       const current = html.getAttribute('data-theme');
       const next = current === 'dark' ? 'light' : 'dark';
       html.setAttribute('data-theme', next);
       localStorage.setItem('theme', next);
-      themeToggle.textContent = next === 'dark' ? '☀️' : '🌙';
+      themeToggle.textContent = next === 'dark' ? 'Clair' : 'Foncé';
     });
 
     // Scroll reveal
@@ -887,23 +871,6 @@
       alert('Merci ! Je te réponds sous 24h max. ⚡');
       this.reset();
     });
-
-    // Image upload
-    function handleImageUpload(event) {
-      const files = event.target.files;
-      const zones = document.querySelectorAll('.fb-img');
-      let idx = 0;
-      for (let i = 0; i < files.length && idx < zones.length; i++, idx++) {
-        const reader = new FileReader();
-        reader.onload = function(e) {
-          const z = zones[idx];
-          z.classList.add('has-image');
-          z.innerHTML = '<img src="' + e.target.result + '" alt="Avis client">';
-          z.onclick = null;
-        };
-        reader.readAsDataURL(files[i]);
-      }
-    }
 
     // Close menu on link click (mobile)
     document.querySelectorAll('.nav-links a').forEach(a => {
