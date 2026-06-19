@@ -163,6 +163,7 @@
     }
     .nav-links .nav-cta:hover { background: #6a48f0; }
 
+    .nav-end { display: flex; align-items: center; gap: 6px; }
     .menu-toggle { display: none; background: none; border: none; color: var(--text); font-size: 1.4rem; cursor: pointer; padding: 4px; }
     @media (max-width: 768px) {
       .menu-toggle { display: block; }
@@ -647,14 +648,16 @@
         <div class="logo-mark">LC</div>
         <div class="logo-text">Luka <span>Corporation</span></div>
       </a>
-      <button class="menu-toggle" onclick="document.querySelector('.nav-links').classList.toggle('open')">☰</button>
+      <div class="nav-end">
+        <button class="theme-toggle" id="themeToggle" aria-label="Mode sombre/clair">🌙</button>
+        <button class="menu-toggle" onclick="document.querySelector('.nav-links').classList.toggle('open')">☰</button>
+      </div>
       <ul class="nav-links">
         <li><a href="#pricing">Tarifs</a></li>
         <li><a href="#packs">Packs</a></li>
         <li><a href="#portfolio">Portfolio</a></li>
         <li><a href="#feedback">Avis</a></li>
         <li><a href="#about">À propos</a></li>
-        <li><button class="theme-toggle" id="themeToggle" aria-label="Mode sombre/clair">🌙</button></li>
         <li><a href="#contact" class="nav-cta">Contact</a></li>
       </ul>
     </div>
@@ -855,9 +858,11 @@
     const themeToggle = document.getElementById('themeToggle');
     const html = document.documentElement;
 
-    const saved = localStorage.getItem('theme') || 'light';
-    html.setAttribute('data-theme', saved);
-    themeToggle.textContent = saved === 'dark' ? '☀️' : '🌙';
+    const saved = localStorage.getItem('theme');
+    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    const theme = saved || (prefersDark ? 'dark' : 'light');
+    html.setAttribute('data-theme', theme);
+    themeToggle.textContent = theme === 'dark' ? '☀️' : '🌙';
 
     themeToggle.addEventListener('click', () => {
       const current = html.getAttribute('data-theme');
