@@ -1,0 +1,817 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Luka Corporation | Scripts YouTube & Calls rédaction</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; scroll-padding-top: 72px; }
+
+    body {
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      background: #f8fafc;
+      color: #0f172a;
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .container { max-width: 1040px; margin: 0 auto; padding: 0 24px; }
+    ::selection { background: #7c5cfc; color: #fff; }
+
+    /* --- STICKY BOTTOM (mobile) --- */
+    .sticky-cta {
+      display: none;
+      position: fixed;
+      bottom: 0; left: 0; right: 0;
+      z-index: 99;
+      background: rgba(255,255,255,0.95);
+      backdrop-filter: blur(12px);
+      border-top: 1px solid #e2e8f0;
+      padding: 12px 20px;
+      gap: 10px;
+      box-shadow: 0 -4px 20px rgba(0,0,0,0.04);
+    }
+    .sticky-cta .btn { flex: 1; justify-content: center; padding: 14px; font-size: 0.95rem; }
+    @media (max-width: 768px) {
+      .sticky-cta { display: flex; }
+      body { padding-bottom: 80px; }
+    }
+
+    /* --- NAV --- */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      background: rgba(255,255,255,0.8);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid #e2e8f0;
+    }
+    nav .container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      height: 64px;
+    }
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+      font-weight: 700;
+    }
+    .logo-mark {
+      width: 32px; height: 32px;
+      border-radius: 8px;
+      background: #7c5cfc;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      font-size: 0.75rem;
+      font-weight: 800;
+    }
+    .logo-text { color: #0f172a; font-size: 0.95rem; letter-spacing: -0.3px; }
+    .logo-text span { color: #7c5cfc; }
+
+    .nav-links { display: flex; gap: 2px; list-style: none; }
+    .nav-links a {
+      text-decoration: none;
+      color: #64748b;
+      font-size: 0.82rem;
+      font-weight: 500;
+      padding: 8px 14px;
+      border-radius: 8px;
+      transition: all .2s;
+    }
+    .nav-links a:hover { color: #0f172a; background: #f1f5f9; }
+    .nav-links .nav-cta {
+      background: #7c5cfc;
+      color: #fff !important;
+    }
+    .nav-links .nav-cta:hover { background: #6a48f0; }
+
+    .menu-toggle { display: none; background: none; border: none; color: #0f172a; font-size: 1.4rem; cursor: pointer; padding: 4px; }
+    @media (max-width: 768px) {
+      .menu-toggle { display: block; }
+      .nav-links {
+        display: none;
+        position: absolute;
+        top: 64px; left: 0; right: 0;
+        background: rgba(255,255,255,0.98);
+        flex-direction: column;
+        gap: 0;
+        padding: 8px 16px 16px;
+        border-bottom: 1px solid #e2e8f0;
+      }
+      .nav-links.open { display: flex; }
+      .nav-links a { padding: 14px 12px; border-bottom: 1px solid #f1f5f9; color: #475569; }
+      .nav-links a:last-child { border: none; }
+      .nav-links .nav-cta { color: #fff !important; }
+    }
+
+    /* --- BTNS --- */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 12px 28px;
+      border-radius: 10px;
+      font-weight: 600;
+      font-size: 0.88rem;
+      text-decoration: none;
+      border: none;
+      cursor: pointer;
+      transition: all .2s;
+    }
+    .btn-primary {
+      background: #7c5cfc;
+      color: #fff;
+      box-shadow: 0 1px 3px rgba(124,92,252,0.15);
+    }
+    .btn-primary:hover { background: #6a48f0; transform: translateY(-1px); box-shadow: 0 4px 12px rgba(124,92,252,0.2); }
+    .btn-outline {
+      background: transparent;
+      color: #475569;
+      border: 1px solid #e2e8f0;
+    }
+    .btn-outline:hover { border-color: #7c5cfc; color: #7c5cfc; background: #f8f7ff; }
+
+    /* --- HERO --- */
+    .hero {
+      padding: 140px 0 80px;
+      background: linear-gradient(180deg, #f0eeff 0%, #f8fafc 100%);
+    }
+    .hero .container { max-width: 800px; text-align: center; }
+    .hero h1 {
+      font-size: 2.8rem;
+      font-weight: 800;
+      letter-spacing: -1px;
+      line-height: 1.1;
+      margin-bottom: 16px;
+      color: #0f172a;
+    }
+    .hero h1 span { color: #7c5cfc; }
+    .hero p {
+      font-size: 1.05rem;
+      color: #64748b;
+      max-width: 520px;
+      margin: 0 auto 28px;
+      line-height: 1.6;
+    }
+    .hero-actions { display: flex; justify-content: center; gap: 12px; flex-wrap: wrap; }
+
+    .hero-quick {
+      display: flex;
+      justify-content: center;
+      gap: 40px;
+      margin-top: 48px;
+      flex-wrap: wrap;
+    }
+    .hero-quick .item { text-align: center; }
+    .hero-quick .item .num {
+      font-size: 1.5rem;
+      font-weight: 800;
+      color: #7c5cfc;
+      line-height: 1;
+    }
+    .hero-quick .item .label {
+      font-size: 0.8rem;
+      color: #94a3b8;
+      margin-top: 2px;
+    }
+
+    @media (max-width: 768px) {
+      .hero { padding: 110px 0 48px; }
+      .hero h1 { font-size: 1.8rem; }
+      .hero p { font-size: 0.92rem; }
+      .hero-actions { flex-direction: column; align-items: center; }
+      .hero-actions .btn { width: 100%; max-width: 300px; }
+      .hero-quick { gap: 24px; }
+    }
+
+    /* --- QUICK NAV --- */
+    .quick-nav {
+      background: #fff;
+      border-bottom: 1px solid #e2e8f0;
+      padding: 12px 0;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+    .quick-nav::-webkit-scrollbar { display: none; }
+    .quick-nav .container { display: flex; gap: 6px; align-items: center; }
+    .quick-nav .label {
+      font-size: 0.7rem;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      font-weight: 600;
+      white-space: nowrap;
+      margin-right: 8px;
+    }
+    .quick-nav a {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 6px 14px;
+      border-radius: 100px;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      color: #64748b;
+      font-size: 0.8rem;
+      font-weight: 500;
+      text-decoration: none;
+      white-space: nowrap;
+      transition: all .2s;
+    }
+    .quick-nav a:hover { border-color: #7c5cfc; color: #7c5cfc; background: #f8f7ff; }
+
+    /* --- SECTIONS --- */
+    section { padding: 80px 0; }
+    .section-tag {
+      display: inline-block;
+      padding: 4px 12px;
+      border-radius: 6px;
+      background: #f0eeff;
+      color: #7c5cfc;
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.2px;
+      margin-bottom: 12px;
+    }
+    .section-title {
+      font-size: 2rem;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      margin-bottom: 8px;
+      line-height: 1.15;
+    }
+    .section-sub {
+      color: #64748b;
+      font-size: 0.95rem;
+      max-width: 500px;
+      line-height: 1.6;
+    }
+
+    @media (max-width: 768px) {
+      section { padding: 56px 0; }
+      .section-title { font-size: 1.5rem; }
+    }
+
+    /* --- PRICING CARDS --- */
+    #pricing { background: #fff; }
+    .price-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      margin-top: 36px;
+    }
+    .price-card {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 16px;
+      padding: 36px 32px;
+      transition: all .25s;
+    }
+    .price-card:hover {
+      border-color: #7c5cfc;
+      box-shadow: 0 4px 20px rgba(124,92,252,0.06);
+    }
+    .price-card .icon { font-size: 1.6rem; margin-bottom: 14px; }
+    .price-card h3 { font-size: 1.1rem; font-weight: 700; margin-bottom: 6px; }
+    .price-card .desc { color: #64748b; font-size: 0.85rem; line-height: 1.6; margin-bottom: 20px; }
+    .price-card .amt {
+      font-size: 2rem;
+      font-weight: 800;
+      color: #7c5cfc;
+      letter-spacing: -1px;
+      line-height: 1;
+    }
+    .price-card .amt small {
+      font-size: 0.85rem;
+      font-weight: 500;
+      color: #94a3b8;
+      letter-spacing: 0;
+    }
+    .price-card .foot { font-size: 0.78rem; color: #94a3b8; margin-top: 2px; }
+    .price-card .btn { margin-top: 20px; width: 100%; }
+
+    @media (max-width: 700px) { .price-grid { grid-template-columns: 1fr; } }
+
+    /* --- PACKS --- */
+    #packs { background: #f8fafc; }
+    .packs-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      margin-top: 36px;
+    }
+    .pack-card {
+      background: #fff;
+      border: 1px solid #e2e8f0;
+      border-radius: 16px;
+      padding: 32px 24px;
+      text-align: center;
+      transition: all .25s;
+    }
+    .pack-card:hover { border-color: #7c5cfc; box-shadow: 0 4px 20px rgba(124,92,252,0.06); }
+    .pack-card.best {
+      border-color: #7c5cfc;
+      background: #f8f7ff;
+      box-shadow: 0 4px 24px rgba(124,92,252,0.08);
+    }
+    .pack-badge {
+      display: inline-block;
+      padding: 3px 10px;
+      border-radius: 6px;
+      background: #7c5cfc;
+      color: #fff;
+      font-size: 0.64rem;
+      font-weight: 700;
+      margin-bottom: 14px;
+    }
+    .pack-card h3 { font-size: 1rem; font-weight: 700; margin-bottom: 6px; }
+    .pack-card .desc { color: #64748b; font-size: 0.82rem; margin-bottom: 18px; line-height: 1.5; }
+    .pack-price { margin-bottom: 4px; }
+    .pack-price .old { font-size: 0.9rem; color: #cbd5e1; text-decoration: line-through; margin-right: 6px; }
+    .pack-price .new { font-size: 1.8rem; font-weight: 800; color: #7c5cfc; letter-spacing: -1px; }
+    .pack-save { font-size: 0.74rem; color: #10b981; font-weight: 500; margin-bottom: 20px; }
+    .pack-card .btn { width: 100%; padding: 12px; font-size: 0.85rem; }
+
+    @media (max-width: 800px) { .packs-grid { grid-template-columns: 1fr; max-width: 400px; margin: 36px auto 0; } }
+
+    /* --- PORTFOLIO --- */
+    .portfolio-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      margin-top: 36px;
+    }
+    .proj-card {
+      background: #fff;
+      border: 1px solid #e2e8f0;
+      border-radius: 14px;
+      overflow: hidden;
+      transition: all .25s;
+    }
+    .proj-card:hover { border-color: #7c5cfc; box-shadow: 0 4px 20px rgba(124,92,252,0.06); }
+    .proj-thumb {
+      height: 140px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.8rem;
+      position: relative;
+    }
+    .proj-thumb .tl {
+      position: absolute;
+      bottom: 10px; left: 10px;
+      padding: 2px 10px;
+      border-radius: 6px;
+      background: rgba(0,0,0,0.25);
+      font-size: 0.64rem;
+      font-weight: 600;
+      color: #fff;
+    }
+    .g1 { background: linear-gradient(135deg, #7c5cfc, #ddd6fe); }
+    .g2 { background: linear-gradient(135deg, #f97316, #fed7aa); }
+    .g3 { background: linear-gradient(135deg, #06b6d4, #a5f3fc); }
+    .g4 { background: linear-gradient(135deg, #ec4899, #fbcfe8); }
+    .g5 { background: linear-gradient(135deg, #10b981, #a7f3d0); }
+    .g6 { background: linear-gradient(135deg, #6366f1, #c7d2fe); }
+    .proj-body { padding: 18px; }
+    .proj-body h3 { font-size: 0.88rem; font-weight: 700; margin-bottom: 4px; }
+    .proj-body p { color: #64748b; font-size: 0.78rem; line-height: 1.5; margin-bottom: 10px; }
+    .tag {
+      display: inline-block;
+      padding: 2px 10px;
+      border-radius: 6px;
+      background: #f0eeff;
+      color: #7c5cfc;
+      font-size: 0.68rem;
+      font-weight: 600;
+      margin-right: 4px;
+      margin-bottom: 4px;
+    }
+
+    @media (max-width: 900px) { .portfolio-grid { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 520px) { .portfolio-grid { grid-template-columns: 1fr; } }
+
+    /* --- FEEDBACK --- */
+    #feedback { background: #f8fafc; }
+    .feedback-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      margin-top: 36px;
+    }
+    .fb-card {
+      background: #fff;
+      border: 1px solid #e2e8f0;
+      border-radius: 14px;
+      padding: 24px;
+      transition: all .25s;
+    }
+    .fb-card:hover { border-color: #7c5cfc; }
+    .fb-card .stars { color: #f59e0b; font-size: 0.8rem; margin-bottom: 10px; letter-spacing: 2px; }
+    .fb-card blockquote {
+      color: #334155; font-size: 0.85rem;
+      font-style: italic; line-height: 1.6; margin-bottom: 14px;
+    }
+    .fb-card blockquote::before { content: '\201C'; }
+    .fb-card blockquote::after { content: '\201D'; }
+    .fb-client { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; }
+    .fb-client .avatar {
+      width: 34px; height: 34px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      font-weight: 700;
+      font-size: 0.75rem;
+      flex-shrink: 0;
+    }
+    .fb-client .info strong { display: block; font-size: 0.82rem; }
+    .fb-client .info span { font-size: 0.7rem; color: #94a3b8; }
+    .fb-img {
+      border-radius: 10px;
+      overflow: hidden;
+      background: #f8fafc;
+      aspect-ratio: 16/9;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #94a3b8;
+      font-size: 0.75rem;
+      cursor: pointer;
+      border: 1px dashed #e2e8f0;
+      transition: all .2s;
+    }
+    .fb-img:hover { border-color: #7c5cfc; background: #f8f7ff; color: #7c5cfc; }
+    .fb-img .upl { font-size: 1.3rem; margin-bottom: 4px; }
+    .fb-img.has-image { border: none; aspect-ratio: auto; cursor: default; }
+    .fb-img.has-image img { width: 100%; display: block; border-radius: 10px; }
+
+    @media (max-width: 800px) { .feedback-grid { grid-template-columns: 1fr; } }
+
+    /* --- ABOUT --- */
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 48px;
+      align-items: center;
+      margin-top: 36px;
+    }
+    .about-grid p { color: #475569; font-size: 0.9rem; line-height: 1.7; margin-bottom: 16px; }
+    .about-highlight {
+      background: #f0eeff;
+      border: 1px solid #ddd6fe;
+      border-radius: 16px;
+      padding: 36px 32px;
+      text-align: center;
+    }
+    .about-highlight h3 { font-size: 1.1rem; font-weight: 700; color: #7c5cfc; margin-bottom: 8px; }
+    .about-highlight p { color: #64748b; font-size: 0.85rem; margin: 0; }
+
+    @media (max-width: 700px) { .about-grid { grid-template-columns: 1fr; gap: 28px; } }
+
+    /* --- CONTACT --- */
+    #contact { background: #fff; }
+    .contact-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 40px;
+      align-items: start;
+      margin-top: 36px;
+    }
+    .contact-info .big {
+      font-size: 3.2rem;
+      font-weight: 900;
+      color: #7c5cfc;
+      letter-spacing: -2px;
+      line-height: 1;
+      margin-bottom: 4px;
+    }
+    .contact-info .big small { font-size: 1rem; font-weight: 400; color: #94a3b8; }
+    .contact-info p { color: #64748b; font-size: 0.88rem; }
+    .contact-form {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 16px;
+      padding: 36px 32px;
+    }
+    .form-group { margin-bottom: 16px; }
+    .form-group label {
+      display: block;
+      font-weight: 500;
+      font-size: 0.8rem;
+      margin-bottom: 4px;
+      color: #475569;
+    }
+    .form-group input,
+    .form-group textarea,
+    .form-group select {
+      width: 100%;
+      padding: 11px 14px;
+      border: 1px solid #e2e8f0;
+      border-radius: 10px;
+      font-size: 0.9rem;
+      font-family: inherit;
+      background: #fff;
+      color: #0f172a;
+      transition: all .2s;
+    }
+    .form-group input::placeholder,
+    .form-group textarea::placeholder { color: #94a3b8; }
+    .form-group input:focus,
+    .form-group textarea:focus,
+    .form-group select:focus {
+      outline: none;
+      border-color: #7c5cfc;
+      box-shadow: 0 0 0 3px rgba(124,92,252,0.08);
+    }
+    .form-group textarea { resize: vertical; min-height: 90px; }
+    .form-group select { background: #fff; }
+    .contact-form .btn { width: 100%; padding: 14px; }
+
+    @media (max-width: 700px) {
+      .contact-grid { grid-template-columns: 1fr; }
+      .contact-form { padding: 28px 20px; }
+    }
+
+    /* --- FOOTER --- */
+    footer {
+      padding: 28px 0;
+      text-align: center;
+      color: #94a3b8;
+      font-size: 0.78rem;
+      border-top: 1px solid #e2e8f0;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="sticky-cta">
+    <a href="#packs" class="btn btn-outline">Voir les offres</a>
+    <a href="#contact" class="btn btn-primary">Me contacter</a>
+  </div>
+
+  <!-- NAV -->
+  <nav>
+    <div class="container">
+      <a href="#" class="logo">
+        <div class="logo-mark">LC</div>
+        <div class="logo-text">Luka <span>Corporation</span></div>
+      </a>
+      <button class="menu-toggle" onclick="document.querySelector('.nav-links').classList.toggle('open')">☰</button>
+      <ul class="nav-links">
+        <li><a href="#pricing">Tarifs</a></li>
+        <li><a href="#packs">Packs</a></li>
+        <li><a href="#portfolio">Portfolio</a></li>
+        <li><a href="#feedback">Avis</a></li>
+        <li><a href="#about">À propos</a></li>
+        <li><a href="#contact" class="nav-cta">Contact</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="container">
+      <h1>Un script YouTube <span>qui accroche</span>, sans te ruiner</h1>
+      <p>Je m'appelle Luka, je rédige des scripts qui cartonnent — ou je t'aide à améliorer les tiens en call. <strong>À partir de 5€.</strong></p>
+      <div class="hero-actions">
+        <a href="#pricing" class="btn btn-primary">Voir les tarifs</a>
+        <a href="#contact" class="btn btn-outline">Me contacter</a>
+      </div>
+      <div class="hero-quick">
+        <div class="item"><div class="num">5€</div><div class="label">le short</div></div>
+        <div class="item"><div class="num">5€/h</div><div class="label">call rédaction</div></div>
+        <div class="item"><div class="num">5€</div><div class="label">la page (longue)</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- QUICK NAV -->
+  <div class="quick-nav">
+    <div class="container">
+      <span class="label">Aller à</span>
+      <a href="#pricing">💎 Tarifs</a>
+      <a href="#packs">📦 Packs</a>
+      <a href="#portfolio">🎬 Portfolio</a>
+      <a href="#feedback">⭐ Avis</a>
+      <a href="#about">👤 À propos</a>
+      <a href="#contact">✉️ Contact</a>
+    </div>
+  </div>
+
+  <!-- PRICING -->
+  <section id="pricing">
+    <div class="container">
+      <div class="section-tag">Mes formules</div>
+      <h2 class="section-title">Deux façons de travailler</h2>
+      <p class="section-sub">Tu veux un script clé en main ou un coup de main sur le tien ? Choisis.</p>
+      <div class="price-grid">
+        <div class="price-card">
+          <div class="icon">🎬</div>
+          <h3>Je t'écris ton script</h3>
+          <div class="desc">Tu me donnes ton sujet, je te livre un script prêt à tourner, structuré et accrocheur.</div>
+          <div class="amt">5€ <small>/ short</small></div>
+          <div class="foot">5€ / page pour une vidéo longue</div>
+          <a href="#contact" class="btn btn-outline">Commander</a>
+        </div>
+        <div class="price-card">
+          <div class="icon">📞</div>
+          <h3>Call rédaction</h3>
+          <div class="desc">Script qui coince ? On saute en visio et on retravaille tout : hook, structure, storytelling.</div>
+          <div class="amt">5€ <small>/ heure</small></div>
+          <div class="foot">45-60 min · tu repars avec un script au point</div>
+          <a href="#contact" class="btn btn-outline">Réserver un call</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PACKS -->
+  <section id="packs">
+    <div class="container">
+      <div class="section-tag">Économise</div>
+      <h2 class="section-title">Les packs du moment</h2>
+      <p class="section-sub">Des formules tout-en-un pour payer moins cher.</p>
+      <div class="packs-grid">
+        <div class="pack-card">
+          <h3>Pack Découverte</h3>
+          <div class="desc">1 short + 1 call 30 min<br>pour lancer ta chaîne</div>
+          <div class="pack-price"><span class="old">10€</span><span class="new">7€</span></div>
+          <div class="pack-save">🎯 3€ d'économie</div>
+          <a href="#contact" class="btn btn-outline">Choisir</a>
+        </div>
+        <div class="pack-card best">
+          <div class="pack-badge">⭐ Le plus choisi</div>
+          <h3>Pack Créateur</h3>
+          <div class="desc">1 script longue (3 pages)<br>+ 1 call 1h pour peaufiner</div>
+          <div class="pack-price"><span class="old">25€</span><span class="new">18€</span></div>
+          <div class="pack-save">🔥 7€ d'économie</div>
+          <a href="#contact" class="btn btn-primary">C'est pour moi</a>
+        </div>
+        <div class="pack-card">
+          <h3>Pack Shorts</h3>
+          <div class="desc">5 scripts shorts prêts à tourner<br>pour alimenter ta chaîne</div>
+          <div class="pack-price"><span class="old">25€</span><span class="new">20€</span></div>
+          <div class="pack-save">⚡ 5€ d'économie</div>
+          <a href="#contact" class="btn btn-outline">Choisir</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PORTFOLIO -->
+  <section id="portfolio">
+    <div class="container">
+      <div class="section-tag">Réalisations</div>
+      <h2 class="section-title">Exemples de scripts</h2>
+      <p class="section-sub">Des projets fictifs pour te donner une idée de mon style.</p>
+      <div class="portfolio-grid">
+        <div class="proj-card"><div class="proj-thumb g1">▶️<span class="tl">Script long</span></div><div class="proj-body"><h3>Pourquoi ton cerveau aime les stories</h3><p>Script éducatif 12 min</p><span class="tag">Storytelling</span><span class="tag">Éducatif</span></div></div>
+        <div class="proj-card"><div class="proj-thumb g2">🎬<span class="tl">Short</span></div><div class="proj-body"><h3>3 secrets marketing en 60s</h3><p>Script court, punchy</p><span class="tag">Short</span><span class="tag">Business</span></div></div>
+        <div class="proj-card"><div class="proj-thumb g3">🎙️<span class="tl">Documentaire</span></div><div class="proj-body"><h3>L'ère du streaming</h3><p>Documentaire 25 min</p><span class="tag">Documentaire</span><span class="tag">Narratif</span></div></div>
+        <div class="proj-card"><div class="proj-thumb g4">💡<span class="tl">Script long</span></div><div class="proj-body"><h3>5 habitudes qui ruinent ta productivité</h3><p>Self-improvement 10 min</p><span class="tag">Développement</span><span class="tag">Liste</span></div></div>
+        <div class="proj-card"><div class="proj-thumb g5">📱<span class="tl">Shorts</span></div><div class="proj-body"><h3>Série de 10 Shorts éducatifs</h3><p>Prêts à tourner</p><span class="tag">Shorts</span><span class="tag">Série</span></div></div>
+        <div class="proj-card"><div class="proj-thumb g6">🎮<span class="tl">Script long</span></div><div class="proj-body"><h3>J'ai testé l'IA pendant 30 jours</h3><p>Expérience 15 min</p><span class="tag">Expérience</span><span class="tag">Tech</span></div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FEEDBACK -->
+  <section id="feedback">
+    <div class="container">
+      <div class="section-tag">Avis</div>
+      <h2 class="section-title">Ils parlent de moi</h2>
+      <p class="section-sub">Clique pour ajouter une capture d'écran de ton feedback.</p>
+      <div class="feedback-grid">
+        <div class="fb-card"><div class="stars">★★★★★</div><blockquote>Luka a tout de suite compris mon style. Le script était parfait du premier coup.</blockquote><div class="fb-client"><div class="avatar" style="background:#f97316;">M</div><div class="info"><strong>Marie</strong><span>Chaîne lifestyle</span></div></div><div class="fb-img" onclick="document.getElementById('fileInput').click();"><div><div class="upl">🖼️</div><div>Ajouter</div></div></div></div>
+        <div class="fb-card"><div class="stars">★★★★★</div><blockquote>Le call m'a débloqué en 30 min. Luka est ultra concret et à l'écoute.</blockquote><div class="fb-client"><div class="avatar" style="background:#06b6d4;">T</div><div class="info"><strong>Thomas</strong><span>Chaîne tech</span></div></div><div class="fb-img" onclick="document.getElementById('fileInput').click();"><div><div class="upl">🖼️</div><div>Ajouter</div></div></div></div>
+        <div class="fb-card"><div class="stars">★★★★★</div><blockquote>Pour ce prix, je m'attendais pas à une telle qualité. Je reviens pour le pack Créateur.</blockquote><div class="fb-client"><div class="avatar" style="background:#10b981;">S</div><div class="info"><strong>Sofia</strong><span>Chaîne bien-être</span></div></div><div class="fb-img" onclick="document.getElementById('fileInput').click();"><div><div class="upl">🖼️</div><div>Ajouter</div></div></div></div>
+      </div>
+      <input type="file" id="fileInput" accept="image/*" style="display:none;" multiple onchange="handleImageUpload(event)">
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section id="about">
+    <div class="container">
+      <div class="section-tag">Qui je suis</div>
+      <h2 class="section-title">Luka, fondateur de Luka Corporation</h2>
+      <p class="section-sub">Un rédacteur qui connaît YouTube et ses codes.</p>
+      <div class="about-grid">
+        <div>
+          <p>Je m'appelle Luka et j'ai créé <strong>Luka Corporation</strong> pour aider les créateurs à avoir des scripts qui déchirent, sans se ruiner.</p>
+          <p>Ma spécialité ? Raconter des histoires qui captent l'attention dès les premières secondes. Que ce soit pour un short percutant ou un documentaire immersif, j'adapte mon écriture à ton style et à ton audience.</p>
+          <p><strong>Tu débutes ?</strong> C'est parfait. Mes formules sont faites pour toi.</p>
+        </div>
+        <div class="about-highlight">
+          <h3>Nouveau sur le marché</h3>
+          <p>Premiers clients bienvenus — je mets un point d'honneur à offrir un service irréprochable à ceux qui me font confiance.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section id="contact">
+    <div class="container">
+      <div class="contact-grid">
+        <div>
+          <div class="section-tag">On y va ?</div>
+          <h2 class="section-title" style="margin-bottom:12px;">Prêt à bosser ensemble ?</h2>
+          <p style="margin-bottom:20px;">Choisis ta formule, raconte-moi ton projet. Je réponds sous 24h.</p>
+          <div class="big">5€<small>/short</small></div>
+          <p style="color:#94a3b8;font-size:0.82rem;margin-top:6px;">Sans engagement. Tu testes, tu verras.</p>
+        </div>
+        <form class="contact-form" id="contactForm">
+          <div class="form-group">
+            <label for="name">Nom / Prénom</label>
+            <input type="text" id="name" name="name" required>
+          </div>
+          <div class="form-group">
+            <label for="email">Email</label>
+            <input type="email" id="email" name="email" required>
+          </div>
+          <div class="form-group">
+            <label for="service">Je veux...</label>
+            <select id="service" name="service">
+              <option>Un script (short)</option>
+              <option>Un script (longue)</option>
+              <option>Un call rédaction</option>
+              <option>Pack Découverte (short + call)</option>
+              <option>Pack Créateur (script long + call)</option>
+              <option>Pack Shorts (x5)</option>
+              <option>Je ne sais pas encore</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="message">Parle-moi de ton projet</label>
+            <textarea id="message" name="message" placeholder="Sujet, style de chaîne, ce que tu veux..." required></textarea>
+          </div>
+          <button type="submit" class="btn btn-primary">Envoyer la demande</button>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="container">
+      <p>© 2026 Luka Corporation — Des scripts YouTube qui cartonnent, pour tous les budgets</p>
+    </div>
+  </footer>
+
+  <script>
+    // Scroll reveal
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) entry.target.classList.add('visible');
+      });
+    }, { threshold: 0.08 });
+
+    document.querySelectorAll('.price-card, .pack-card, .proj-card, .fb-card, .about-highlight').forEach(el => observer.observe(el));
+
+    // Form
+    document.getElementById('contactForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      alert('Merci ! Je te réponds sous 24h max. ⚡');
+      this.reset();
+    });
+
+    // Image upload
+    function handleImageUpload(event) {
+      const files = event.target.files;
+      const zones = document.querySelectorAll('.fb-img');
+      let idx = 0;
+      for (let i = 0; i < files.length && idx < zones.length; i++, idx++) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          const z = zones[idx];
+          z.classList.add('has-image');
+          z.innerHTML = '<img src="' + e.target.result + '" alt="Avis client">';
+          z.onclick = null;
+        };
+        reader.readAsDataURL(files[i]);
+      }
+    }
+
+    // Close menu on link click (mobile)
+    document.querySelectorAll('.nav-links a').forEach(a => {
+      a.addEventListener('click', () => document.querySelector('.nav-links').classList.remove('open'));
+    });
+  </script>
+  <style>
+    .price-card, .pack-card, .proj-card, .fb-card, .about-highlight { opacity: 0; transform: translateY(16px); transition: opacity .5s ease, transform .5s ease; }
+    .price-card.visible, .pack-card.visible, .proj-card.visible, .fb-card.visible, .about-highlight.visible { opacity: 1; transform: translateY(0); }
+  </style>
+</body>
+</html>
